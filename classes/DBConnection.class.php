@@ -1,6 +1,8 @@
 <?php
 
 class DBConnection {
+
+    //TODO: Move to a settings files
     private $host = "localhost";
     private $user = "root";
     private $db = "world";
@@ -9,31 +11,47 @@ class DBConnection {
     
     public function __construct() {
         
+        //create the PDO connection
         $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db, $this->user, $this->pass);
     }
     
+    //display data
     public function showData($table) {
         
+        //create the sql query
         $sql = "SELECT * FROM $table";
         $q = $this->conn->query($sql) or die("failed!");
         
+        //populate the data array
         while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
             $data[] = $r;
         }
+
+        //return the data
         return $data;
     }
     
+    //get the data by ID,
     public function getById($id, $table) {
         
         $sql = "SELECT * FROM $table WHERE id = :id";
-        $q   = $this->conn->prepare($sql);
+        
+        //prep the sql
+        $q = $this->conn->prepare($sql);
+        
+        //execute and return the id
         $q->execute(array(
             ':id' => $id
         ));
+
+        //fetch the data
         $data = $q->fetch(PDO::FETCH_ASSOC);
+
+        //return the id
         return $data;
     }
     
+    //update
     public function update($id, $name, $email, $mobile, $address, $table) {
         
         $sql = "UPDATE $table
@@ -67,7 +85,11 @@ class DBConnection {
     public function deleteData($id, $table) {
         
         $sql = "DELETE FROM $table WHERE id=:id";
+
+        //prep the sql
         $q   = $this->conn->prepare($sql);
+
+        //execute the 
         $q->execute(array(
             ':id' => $id
         ));
@@ -76,6 +98,8 @@ class DBConnection {
 }
 
 
+//create a test instance
 $o = new DBConnection();
-print_r($o->showData('city'));
+print_r($o->getById(1, 'city'));
+//print_r($o->showData('city'));
 ?>
