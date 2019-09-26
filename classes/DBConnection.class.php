@@ -100,6 +100,11 @@ class DBConnection {
 
 //create a test instance
 $o = new DBConnection();
+
 print_r($o->getById(1, 'city'));
-//print_r($o->showData('city'));
+
+//loop through the array
+foreach($o->getById(1, 'city') as $city) {
+    echo $city . "\n";
+}
 ?>
