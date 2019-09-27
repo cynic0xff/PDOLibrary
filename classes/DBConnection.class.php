@@ -93,7 +93,7 @@ class DBConnection {
     }
     
     //delete
-    public function deleteData($id, $table) {
+    public function deleteData($table, $id) {
         
         $sql = "DELETE FROM $table WHERE id=:id";
 
@@ -104,6 +104,7 @@ class DBConnection {
         $q->execute(array(
             ':id' => $id
         ));
+
         return true;
     }
 }
@@ -121,8 +122,10 @@ foreach($o->getById(1, 'city') as $city) {
 }
 
 //insert
-$result = $o->insertData('cars', 'Lexus', 'Green');
+$id = $o->insertData('cars', 'Lexus', 'Green');
+echo 'Result: ' . $id;
 
-echo 'Result: ' . $result;
+//delete
+$o->deleteData('cars', $id);
 
 ?>
