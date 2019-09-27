@@ -52,10 +52,13 @@ class DBConnection {
     }
     
     //update
-    public function update($id, $name, $email, $mobile, $address, $table) {
+    public function update($table, $id, $name, $color) {
         
         //create the sql statemenet
-        $sql = "UPDATE $table SET name=:name,email=:email,mobile=:mobile,address=:address WHERE id=:id";
+        $sql = "UPDATE $table SET 
+            name=:name,
+            color=:color 
+            WHERE id=:id";
 
         //pre the sql
         $q = $this->conn->prepare($sql);
@@ -64,9 +67,7 @@ class DBConnection {
         $q->execute(array(
             ':id' => $id,
             ':name' => $name,
-            ':email' => $email,
-            ':mobile' => $mobile,
-            ':address' => $address
+            ':color' => $color
         ));
 
         //TODO: return ids of update
@@ -128,4 +129,7 @@ echo 'Result: ' . $id;
 //delete
 $o->deleteData('cars', $id);
 
+
+//update
+$o->update('cars', 12, 'Lexy', 'Blue');
 ?>
