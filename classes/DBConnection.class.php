@@ -54,10 +54,13 @@ class DBConnection {
     //update
     public function update($id, $name, $email, $mobile, $address, $table) {
         
-        $sql = "UPDATE $table
- SET name=:name,email=:email,mobile=:mobile,address=:address
- WHERE id=:id";
-        $q   = $this->conn->prepare($sql);
+        //create the sql statemenet
+        $sql = "UPDATE $table SET name=:name,email=:email,mobile=:mobile,address=:address WHERE id=:id";
+
+        //pre the sql
+        $q = $this->conn->prepare($sql);
+
+        //execute the update
         $q->execute(array(
             ':id' => $id,
             ':name' => $name,
@@ -65,23 +68,31 @@ class DBConnection {
             ':mobile' => $mobile,
             ':address' => $address
         ));
+
+        //TODO: return ids of update
         return true;
         
     }
     
-    public function insertData($name, $email, $mobile, $address, $table) {
-        
-        $sql = "INSERT INTO $table SET name=:name,email=:email,mobile=:mobile,address=:address";
+    //insert
+    public function insertData($table, $name, $color) {
+
+        $sql = "INSERT INTO $table SET 
+            name=:name, 
+            color=:color";
+
         $q   = $this->conn->prepare($sql);
         $q->execute(array(
             ':name' => $name,
-            ':email' => $email,
-            ':mobile' => $mobile,
-            ':address' => $address
+            ':color' => $color
         ));
-        return true;
+
+        //return the id of the last entry
+        return $this->conn->lastInsertId();
+
     }
     
+    //delete
     public function deleteData($id, $table) {
         
         $sql = "DELETE FROM $table WHERE id=:id";
@@ -101,10 +112,17 @@ class DBConnection {
 //create a test instance
 $o = new DBConnection();
 
+//get
 print_r($o->getById(1, 'city'));
 
 //loop through the array
 foreach($o->getById(1, 'city') as $city) {
     echo $city . "\n";
 }
+
+//insert
+$result = $o->insertData('cars', 'Lexus', 'Green');
+
+echo 'Result: ' . $result;
+
 ?>
